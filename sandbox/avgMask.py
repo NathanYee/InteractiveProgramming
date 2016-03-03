@@ -16,14 +16,16 @@ def rbgcvt(image):
     mask = cv2.inRange(image, lower, upper)
     output = cv2.bitwise_and(image, image, mask = mask)
 
-    return mask 
+    return mask
 
 cap = cv2.VideoCapture(0)
+
 
 # Capture frame-by-frame
 ret, frame = cap.read()
 detection = rbgcvt(frame)
 
+cap.release()
 def vertical(image):
     #find average vertical location
     #first find number of successes in each line
@@ -43,7 +45,24 @@ def vertical(image):
     return vertPos
 
 #next find horizontal positon
+def horizontal(image):
+    #first find number of success for vertical line
+    numberVertLine = []
+    total = 0
+    for i in range(len(image[0])):
+        counter = 0
+        for line in image:
+            if line[i] == 255:
+                counter += 1
+                total += 1
+        numberVertLine.append(counter*(i+1))
 
+
+    return np.sum(numberVertLine)/total
+print (horizontal(detection)/640., vertical(detection)/480.)
+
+cv2.imshow("image", detection)
+cv2.waitKey(0)
 # Our operations on the frame come here
 # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
