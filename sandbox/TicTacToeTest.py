@@ -25,6 +25,7 @@ def print_game_state(i,j):
         print ""
 
 def find_third(pos):
+    """ Finds which box was clicked in """
     #determine which third the click was in (veritcal rectangles)
     if pos[0] < left_third:
         j = 0
@@ -42,6 +43,35 @@ def find_third(pos):
         i = 2
     return (i , j)
 
+def check_for_win(cell_states):
+    #check verticals
+    for j in range(3):
+        if ( cell_states.get((0,j)) == cell_states.get((1,j)) 
+            == cell_states.get((2,j)) != 0) : 
+            print "you win"
+    #check horizontals
+    for i in range(3):
+        if ( cell_states.get((i, 0)) == cell_states.get((i, 1)) 
+            == cell_states.get((i ,2)) != 0) : 
+            print "you win"
+    #check diagonals
+    if (cell_states.get((0, 0)) == cell_states.get((1, 1)) 
+            == cell_states.get((2,2)) != 0) :
+            print "you win 1" 
+    elif (cell_states.get((2, 0)) == cell_states.get((1, 1)) 
+            == cell_states.get((0, 2)) != 0) :
+            print "you win 2"
+
+#Creating borders
+left = pygame.Rect((left_third-5.0), 0, 10, height)
+pygame.draw.rect(screen, (200,200,200) , left)
+right = pygame.Rect((right_third-5.0), 0, 10, height)
+pygame.draw.rect(screen, (200,200,200) , right)
+top = pygame.Rect(0, (top_third-5.0), width, 10)
+pygame.draw.rect(screen, (200,200,200) , top)
+bottom = pygame.Rect(0, (bottom_third-5.0), width, 10)
+pygame.draw.rect(screen, (200,200,200) , bottom)
+
 
 while True:
     for event in pygame.event.get():
@@ -52,13 +82,14 @@ while True:
         if event.type == pygame.MOUSEBUTTONUP:
             pos = pygame.mouse.get_pos()
 
-            
             #update clicked cell
-            cell_states[find_third(pos)] = 1
-            
+            if cell_states[find_third(pos)] == 0:
+                cell_states[find_third(pos)] = 1
             print_game_state(i,j)
 
-    screen.fill(black)
+            check_for_win (cell_states)
+
+    # screen.fill(black)
     # screen.blit(ball, ballrect)
     pygame.display.flip()
 
