@@ -1,6 +1,26 @@
 import cv2
 import numpy as np
 
+def grid(x,y):
+    x = x/640.
+    y = y/480.
+
+    if x < .33:
+        x_return = 0
+    elif x < .66:
+        x_return = 1
+    else:
+        x_return = 2
+
+    if y < .33:
+        y_return = 0
+    elif y < .66:
+        y_return = 1
+    else:
+        y_return = 2
+
+    return x_return, y_return
+
 cap = cv2.VideoCapture(0)
 
 # take first frame of the video
@@ -11,7 +31,7 @@ lower_blue = np.array([50,75,50])
 upper_blue = np.array([75,150,200])
 
 # setup initial location of window
-r,h,c,w = 200,200,200,200  # simply hardcoded the values
+r,h,c,w = 0,120,0,120  # simply hardcoded the values
 track_window = (c,r,w,h)
 
 # set up the ROI for tracking
@@ -37,21 +57,21 @@ while(1):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     dst = cv2.calcBackProject([hsv],[0],roi_hist,[0,180],1)
 
-    ret, track_window = cv2.meanShift(dst, track_window, term_crit)
-
-    #draw it on frame
-    x,y,w,h = track_window
-    img2 = cv2.rectangle(frame, (x,y), (x+w,y+h), 255,2)
-
-    # define range of green color in HSV
-    lower_blue = np.array([50,75,50])
-    upper_blue = np.array([75,150,200])
-
     # Threshold the HSV image to get only blue colors
+
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
 
     # Bitwise-AND mask and original image
     res = cv2.bitwise_and(frame,frame, mask= mask)
+
+    ret, track_window = cv2.meanShift(dst, track_window, term_crit)
+
+    #draw it on frame
+    x,y,w,h = track_window
+
+    print grid(x+(w/2), y+(h/2))
+
+    img2 = cv2.rectangle(frame, (x,y), (x+w,y+h), 255,2)
 
     cv2.imshow('frame',frame)
     cv2.imshow('mask',mask)
