@@ -31,7 +31,7 @@ lower_blue = np.array([50,75,50])
 upper_blue = np.array([75,150,200])
 
 # setup initial location of window
-r,h,c,w = 0,120,0,120  # simply hardcoded the values
+r,h,c,w = 200,120,260,120  # simply hardcoded the values
 track_window = (c,r,w,h)
 
 # set up the ROI for tracking
