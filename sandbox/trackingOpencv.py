@@ -69,7 +69,7 @@ while(1):
     #draw it on frame
     x,y,w,h = track_window
 
-    print grid(x+(w/2), y+(h/2))
+    print (x+(w/2), y+(h/2))
 
     img2 = cv2.rectangle(frame, (x,y), (x+w,y+h), 255,2)
 
