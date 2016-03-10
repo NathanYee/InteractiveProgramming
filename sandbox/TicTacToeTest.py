@@ -2,6 +2,7 @@ import sys, pygame
 import cv2
 import numpy as np
 import random
+import time
 from time import time
 
 cap = cv2.VideoCapture(0)
@@ -132,6 +133,8 @@ for i in range(len(rect_x_pos)):
 
 turn = 0 #initialize the turn
 
+t = time()
+
 while True:
     # Take each frame
     ret, frame = cap.read()
@@ -162,38 +165,40 @@ while True:
     if k == 27:
         break
 
+
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT: sys.exit()
 
         #control loop
 
-        if event.type == pygame.MOUSEBUTTONUP:
-            pos = (2*(x+(w/2)), 2*(y+(h/2))) #green ball location
-            # print pos
+    if time() > t + 3: 
+        print "hello"
+        t = time()
+        pos = (2*(x+(w/2)), 2*(y+(h/2))) #green ball location
+        # print pos
 
-            #update clicked cell
-            if cell_states[find_third(pos)] == 0 and (turn % 2 == 0) :
-                #user input
-                cell_states[find_third(pos)] = 1
-                update_rectangle = rect_dict.get(find_third(pos))
-                pygame.draw.rect(screen, blue, update_rectangle)
-                turn +=1
-                check_for_win (cell_states)
-
-                #AI turn
-                random_cell = generate_random_cell()
-                cell_states[random_cell] = -1
-                print cell_states
-                update_rectangle = rect_dict.get(random_cell)
-                pygame.draw.rect(screen, red, update_rectangle)
-
-                turn +=1
-
-            # print_game_state(i,j)
-
+        #update clicked cell
+        if cell_states[find_third(pos)] == 0 and (turn % 2 == 0) :
+            #user input
+            cell_states[find_third(pos)] = 1
+            update_rectangle = rect_dict.get(find_third(pos))
+            pygame.draw.rect(screen, blue, update_rectangle)
+            turn +=1
             check_for_win (cell_states)
-            
+
+            #AI turn
+            random_cell = generate_random_cell()
+            cell_states[random_cell] = -1
+            print cell_states
+            update_rectangle = rect_dict.get(random_cell)
+            pygame.draw.rect(screen, red, update_rectangle)
+
+            turn +=1
+
+        # print_game_state(i,j)
+
+        check_for_win (cell_states)
 
     pygame.display.flip()
 
