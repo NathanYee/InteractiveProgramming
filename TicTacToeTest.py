@@ -60,12 +60,18 @@ def find_third(pos):
     return (i , j)
 
 def generate_random_cell():
+    """
+    generate_random_cell generates a random cell to be used by the computer player
+    """
     i = random.randint(0,2)
     j = random.randint(0,2)
     # print i,j
     return (i , j)
 
 def check_for_win(cell_states):
+    """
+    Takes the game state dictionary and checks to see if there is a winner.  Calls declare_winner if there is a winner.
+    """
     #check verticals
     for j in range(3):
         if ( cell_states.get((0,j)) == cell_states.get((1,j)) 
@@ -85,6 +91,9 @@ def check_for_win(cell_states):
             declare_winner(cell_states.get((1, 1)))
 
 def declare_winner(int):
+    """
+    declare_winner determines which player wins the game and prints to the console
+    """
     if int == 1:
         print "Player 1 wins"
     elif int == -1:
@@ -133,9 +142,10 @@ for i in range(len(rect_x_pos)):
 
 turn = 0 #initialize the turn
 
-t = time()
+t = time() #capture the current time.  Will update gamestate when the time is at least three seconds later
 
-while True:
+
+while True: #main control loop
     # Take each frame
     ret, frame = cap.read()
     frame = cv2.flip(frame,1)
@@ -173,7 +183,6 @@ while True:
         #control loop
 
     if time() > t + 3: 
-        print "hello"
         t = time()
         pos = (2*(x+(w/2)), 2*(y+(h/2))) #green ball location
         # print pos
@@ -190,7 +199,6 @@ while True:
             #AI turn
             random_cell = generate_random_cell()
             cell_states[random_cell] = -1
-            print cell_states
             update_rectangle = rect_dict.get(random_cell)
             pygame.draw.rect(screen, red, update_rectangle)
 
