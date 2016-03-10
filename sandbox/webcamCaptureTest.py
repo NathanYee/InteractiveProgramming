@@ -14,7 +14,7 @@ def rbgcvt(image):
         mask = cv2.inRange(image, lower, upper)
         output = cv2.bitwise_and(image, image, mask = mask)
 
-    return output
+    return mask 
 
 cap = cv2.VideoCapture(0)
 
