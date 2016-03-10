@@ -173,7 +173,6 @@ while True:
         #control loop
 
     if time() > t + 3: 
-        print "hello"
         t = time()
         pos = (2*(x+(w/2)), 2*(y+(h/2))) #green ball location
         # print pos
@@ -190,7 +189,6 @@ while True:
             #AI turn
             random_cell = generate_random_cell()
             cell_states[random_cell] = -1
-            print cell_states
             update_rectangle = rect_dict.get(random_cell)
             pygame.draw.rect(screen, red, update_rectangle)
 
