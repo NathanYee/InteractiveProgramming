@@ -1,6 +1,7 @@
 import sys, pygame
 import cv2
 import numpy as np
+import random
 from time import time
 
 cap = cv2.VideoCapture(0)
@@ -55,6 +56,12 @@ def find_third(pos):
         i = 1
     elif bottom_third <= pos[1]:
         i = 2
+    return (i , j)
+
+def generate_random_cell():
+    i = random.randint(0,2)
+    j = random.randint(0,2)
+    # print i,j
     return (i , j)
 
 def check_for_win(cell_states):
@@ -136,7 +143,7 @@ while True:
 
     # Threshold the HSV image to get only blue colors
 
-    # mask = cv2.inRange(hsv, lower_blue, upper_blue)
+    mask = cv2.inRange(hsv, lower_blue, upper_blue)
 
     # Bitwise-AND mask and original image
     # res = cv2.bitwise_and(frame,frame, mask= mask)
@@ -149,7 +156,7 @@ while True:
     img2 = cv2.rectangle(frame, (x,y), (x+w,y+h), 255,2)
 
     cv2.imshow('frame',frame)
-    # cv2.imshow('mask',mask)
+    cv2.imshow('mask',mask)
     # cv2.imshow('res',res)
     k = cv2.waitKey(5) & 0xFF
     if k == 27:
@@ -162,27 +169,32 @@ while True:
         #control loop
 
         if event.type == pygame.MOUSEBUTTONUP:
-            pos = (2*(x+(w/2)), 2*(y+(h/2)))
-            print pos
+            pos = (2*(x+(w/2)), 2*(y+(h/2))) #green ball location
+            # print pos
 
             #update clicked cell
             if cell_states[find_third(pos)] == 0 and (turn % 2 == 0) :
+                #user input
                 cell_states[find_third(pos)] = 1
                 update_rectangle = rect_dict.get(find_third(pos))
                 pygame.draw.rect(screen, blue, update_rectangle)
                 turn +=1
-            elif cell_states[find_third(pos)] == 0 and (turn % 2 != 0) :
-                cell_states[find_third(pos)] = -1
-                update_rectangle = rect_dict.get(find_third(pos))
+                check_for_win (cell_states)
+
+                #AI turn
+                random_cell = generate_random_cell()
+                cell_states[random_cell] = -1
+                print cell_states
+                update_rectangle = rect_dict.get(random_cell)
                 pygame.draw.rect(screen, red, update_rectangle)
+
                 turn +=1
 
-            print_game_state(i,j)
+            # print_game_state(i,j)
 
             check_for_win (cell_states)
+            
 
-    # screen.fill(black)
-    # screen.blit(ball, ballrect)
     pygame.display.flip()
 
 #close opencv windows
