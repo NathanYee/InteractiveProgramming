@@ -3,7 +3,7 @@ import cv2
 
 #make color filter function
 def rbgcvt(image):
-    boundaries = [([0, 0, 50], [50, 50, 255])]
+    boundaries = [([0, 0, 50], [100, 100, 255])]
     for (lower, upper) in boundaries:
         # create NumPy arrays from the boundaries
         lower = np.array(lower, dtype = "uint8")

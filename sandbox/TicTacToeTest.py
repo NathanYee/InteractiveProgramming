@@ -119,7 +119,7 @@ while True:
             print_game_state(i,j)
 
             check_for_win (cell_states)
-
+            
     # screen.fill(black)
     # screen.blit(ball, ballrect)
     pygame.display.flip()
